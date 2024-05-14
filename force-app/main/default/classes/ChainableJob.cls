@@ -60,8 +60,14 @@ public abstract class ChainableJob implements Database.Batchable<SObject>, Datab
         if(!continueOnError && apexJob.NumberOfErrors > 0) {
             throw new ChainableJobException(jobName + ' job failed with ' + apexJob.NumberOfErrors + ' failures, and our ChainableJob is set to stop on error.');
         }
+        if(chainedBatchJob != null) {
+            // this can be null if the job is run all by itself outside of a Chainable Job
+            chainedBatchJob.currentJobFinished();
+        }
+    }
 
-        chainedBatchJob.currentJobFinished();
+    public String getChainableFilter() {
+        return filter??'';
     }
 
     /**
