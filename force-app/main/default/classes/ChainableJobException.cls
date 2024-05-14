@@ -1,0 +1,1 @@
+public class ChainableJobException extends Exception { }
